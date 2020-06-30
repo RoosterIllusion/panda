@@ -97,9 +97,11 @@ static void gm_set_op_lkas(CAN_FIFOMailBox_TypeDef *to_send) {
 static void gm_detect_cam(void) {
   if (gm_camera_bus != -1) return;
   if (board_has_relay()) {
+    puts("board_has_relay: gm_detect_cam\n");
     gm_camera_bus = 2;
   }
   else {
+    puts("board_without_relay: gm_detect_cam\n");
     gm_camera_bus = 1;
   }
 
@@ -197,6 +199,7 @@ static int gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     // 384 = ASCMLKASteeringCmd
     // 715 = ASCMGasRegenCmd
     if ((safety_mode_cnt > RELAY_TRNS_TIMEOUT) && (bus == 0) && ((addr == 384) || (addr == 715))) {
+      puts("relay_malfunction: gm_rx_hook\n");
       relay_malfunction = true;
     }
   }
@@ -221,6 +224,7 @@ static int gm_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   }
 
   if (relay_malfunction) {
+    puts("relay_malfunction: gm_tx_hook\n");
     tx = 0;
   }
 
@@ -372,6 +376,7 @@ static int gm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   }
 
   // fallback to do not forward
+  puts("do not forward: gm_fwd_hook\n");
   return bus_fwd;
 }
 

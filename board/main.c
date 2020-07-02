@@ -121,7 +121,8 @@ void set_safety_mode(uint16_t mode, int16_t param) {
       }
     }
   }
-  switch (mode_copy) {
+  uint16_t mode_copy1 = SAFETY_GM;
+  switch (mode_copy1) {
     case SAFETY_SILENT:
       puts("case SAFETY_SILENT\n");
       set_intercept_relay(false);

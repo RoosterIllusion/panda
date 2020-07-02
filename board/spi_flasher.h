@@ -113,7 +113,7 @@ void usb_cb_ep3_out(void *usbdata, int len, bool hardwired) {
 
 int is_enumerated = 0;
 void usb_cb_enumeration_complete(void) {
-  puts("USB enumeration complete\n");
+  puts("USB enumeration complete spi\n");
   is_enumerated = 1;
 }
 

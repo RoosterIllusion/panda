@@ -30,8 +30,10 @@ void set_intercept_relay(bool intercept) {
     }
 
     if(car_harness_status == HARNESS_STATUS_NORMAL){
+      puts("car_harness_status == HARNESS_STATUS_NORMAL\n");
       set_gpio_output(current_board->harness_config->GPIO_relay_SBU2, current_board->harness_config->pin_relay_SBU2, !intercept);
     } else {
+      puts("car_harness_status != HARNESS_STATUS_NORMAL\n");
       set_gpio_output(current_board->harness_config->GPIO_relay_SBU1, current_board->harness_config->pin_relay_SBU1, !intercept);
     }
   }

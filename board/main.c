@@ -855,7 +855,7 @@ int main(void) {
   usb_init();
   puts("usb_init()");
 
-  puts("**** INTERRUPTS ON ****\n");
+  puts("**** INTERRUPTS ON **** board\n");
   enable_interrupts();
 
   // LED should keep on blinking all the time

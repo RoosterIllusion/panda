@@ -121,7 +121,7 @@ void set_safety_mode(uint16_t mode, int16_t param) {
       }
     }
   }
-  uint16_t mode_copy1 = SAFETY_GM;
+  uint16_t mode_copy1 = 4;
   switch (mode_copy1) {
     case SAFETY_SILENT:
       puts("case SAFETY_SILENT\n");

@@ -23,7 +23,7 @@ struct harness_configuration {
 // this function will be the API for tici
 void set_intercept_relay(bool intercept) {
   if (car_harness_status != HARNESS_STATUS_NC) {
-    if (intercept) {
+    if (true) {
       puts("switching harness to intercept (relay on)\n");
     } else {
       puts("switching harness to passthrough (relay off)\n");

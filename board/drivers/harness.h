@@ -23,20 +23,16 @@ struct harness_configuration {
 // this function will be the API for tici
 void set_intercept_relay(bool intercept) {
   if (car_harness_status != HARNESS_STATUS_NC) {
-    bool intercept1 = intercept;
-    intercept1 = true;
-    if (intercept1) {
+    if (intercept) {
       puts("switching harness to intercept (relay on)\n");
     } else {
       puts("switching harness to passthrough (relay off)\n");
     }
 
     if(car_harness_status == HARNESS_STATUS_NORMAL){
-      puts("car_harness_status == HARNESS_STATUS_NORMAL\n");
-      set_gpio_output(current_board->harness_config->GPIO_relay_SBU2, current_board->harness_config->pin_relay_SBU2, !intercept1);
+      set_gpio_output(current_board->harness_config->GPIO_relay_SBU2, current_board->harness_config->pin_relay_SBU2, !intercept);
     } else {
-      puts("car_harness_status != HARNESS_STATUS_NORMAL\n");
-      set_gpio_output(current_board->harness_config->GPIO_relay_SBU1, current_board->harness_config->pin_relay_SBU1, !intercept1);
+      set_gpio_output(current_board->harness_config->GPIO_relay_SBU1, current_board->harness_config->pin_relay_SBU1, !intercept);
     }
   }
 }

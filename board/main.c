@@ -107,7 +107,6 @@ void debug_ring_callback(uart_ring *ring) {
 
 // this is the only way to leave silent mode
 void set_safety_mode(uint16_t mode, int16_t param) {
-  puts("set_safety_mode\n");
   uint16_t mode_copy = mode;
   int err = set_safety_hooks(mode_copy, param);
   if (err == -1) {
@@ -121,10 +120,8 @@ void set_safety_mode(uint16_t mode, int16_t param) {
       }
     }
   }
-  uint16_t mode_copy1 = 4;
-  switch (mode_copy1) {
+  switch (mode_copy) {
     case SAFETY_SILENT:
-      puts("case SAFETY_SILENT\n");
       set_intercept_relay(false);
       if (board_has_obd()) {
         current_board->set_can_mode(CAN_MODE_NORMAL);
@@ -132,7 +129,6 @@ void set_safety_mode(uint16_t mode, int16_t param) {
       can_silent = ALL_CAN_SILENT;
       break;
     case SAFETY_NOOUTPUT:
-      puts("case SAFETY_NOOUTPUT\n");
       set_intercept_relay(false);
       if (board_has_obd()) {
         current_board->set_can_mode(CAN_MODE_NORMAL);
@@ -140,7 +136,7 @@ void set_safety_mode(uint16_t mode, int16_t param) {
       can_silent = ALL_CAN_LIVE;
       break;
     case SAFETY_ELM327:
-      puts("case SAFETY_ELM327\n");
+      set_intercept_relay(false);
       heartbeat_counter = 0U;
       if (board_has_obd()) {
         current_board->set_can_mode(CAN_MODE_OBD_CAN2);
@@ -149,20 +145,14 @@ void set_safety_mode(uint16_t mode, int16_t param) {
       break;
       //TODO: add GM case that captures rolling counters
     default:
-      puts("case default: set_intercept_relay(true);\n");
       set_intercept_relay(true);
       heartbeat_counter = 0U;
       if (board_has_obd()) {
-        puts("board_has_obd\n");
         current_board->set_can_mode(CAN_MODE_NORMAL);
-      } else {
-        puts("board_has_obd = false\n");
       }
-      puts("can_silent = ALL_CAN_LIVE\n");
       can_silent = ALL_CAN_LIVE;
       break;
   }
-  puts("can_init_all\n");
   can_init_all();
 }
 
@@ -247,7 +237,7 @@ void usb_cb_ep3_out(void *usbdata, int len, bool hardwired) {
 }
 
 void usb_cb_enumeration_complete() {
-  puts("USB enumeration complete main\n");
+  puts("USB enumeration complete\n");
   is_enumerated = 1;
 }
 
@@ -726,7 +716,7 @@ void TIM1_BRK_TIM9_IRQ_Handler(void) {
       puth(heartbeat_counter);
       puts(" seconds. Safety is set to SILENT mode.\n");
       if (current_safety_mode != SAFETY_SILENT) {
-        //set_safety_mode(SAFETY_SILENT, 0U);
+        set_safety_mode(SAFETY_SILENT, 0U);
       }
       // if (power_save_status != POWER_SAVE_STATUS_ENABLED) {
       //   set_power_save_state(POWER_SAVE_STATUS_ENABLED);
@@ -833,30 +823,25 @@ int main(void) {
 
   // init to SILENT and can silent
   set_safety_mode(SAFETY_SILENT, 0);
-  puts("Init to silent\n");
 
   // enable CAN TXs
   current_board->enable_can_transcievers(true);
-  puts("enable CAN TXs\n");
 
 #ifndef EON
   spi_init();
-  puts("EON spi_init\n");
 #endif
 
   // 1hz
   timer_init(TIM9, 1464);
   NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
-  puts("NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn)\n");
 
 #ifdef DEBUG
   puts("DEBUG ENABLED\n");
 #endif
   // enable USB (right before interrupts or enum can fail!)
   usb_init();
-  puts("usb_init()");
 
-  puts("**** INTERRUPTS ON **** board\n");
+  puts("**** INTERRUPTS ON ****\n");
   enable_interrupts();
 
   // LED should keep on blinking all the time

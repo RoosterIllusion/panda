@@ -334,7 +334,7 @@ int main(void) {
 
   watchdog_init();
 
-  puts("**** INTERRUPTS ON **** pedal\n");
+  puts("**** INTERRUPTS ON ****\n");
   enable_interrupts();
 
   // main pedal loop

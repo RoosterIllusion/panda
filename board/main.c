@@ -540,9 +540,7 @@ int usb_cb_control_msg(USB_Setup_TypeDef *setup, uint8_t *resp, bool hardwired) 
       break;
     // **** 0xe7: set power save state
     case 0xe7:
-      //set_power_save_state(setup->b.wValue.w);
-      //temp debug black panda
-      set_power_save_state(POWER_SAVE_STATUS_DISABLED);
+      set_power_save_state(setup->b.wValue.w);
       break;
     // **** 0xf0: do k-line wValue pulse on uart2 for Acura
     case 0xf0:
@@ -718,11 +716,9 @@ void TIM1_BRK_TIM9_IRQ_Handler(void) {
       if (current_safety_mode != SAFETY_SILENT) {
         set_safety_mode(SAFETY_SILENT, 0U);
       }
-      // if (power_save_status != POWER_SAVE_STATUS_ENABLED) {
-      //   set_power_save_state(POWER_SAVE_STATUS_ENABLED);
-      // }
-      //temp disable power save
-      set_power_save_state(POWER_SAVE_STATUS_DISABLED);
+      if (power_save_status != POWER_SAVE_STATUS_ENABLED) {
+        set_power_save_state(POWER_SAVE_STATUS_ENABLED);
+      }
 
       // Also disable fan and IR when the heartbeat goes missing
       current_board->set_fan_power(0U);
